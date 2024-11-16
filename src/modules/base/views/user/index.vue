@@ -266,11 +266,11 @@ const Upsert = useUpsert({
 				name: 'el-radio-group',
 				options: [
 					{
-						label: '开启',
+						label: '启用',
 						value: 1
 					},
 					{
-						label: '关闭',
+						label: '禁用',
 						value: 0
 					}
 				]

@@ -115,6 +115,7 @@ import MenuImp from './components/imp.vue';
 import MenuExp from './components/exp.vue';
 import AutoMenu from '/$/helper/components/auto-menu/index.vue';
 import AutoPerms from '/$/helper/components/auto-perms/index.vue';
+import { reactive } from 'vue';
 
 interface Item extends Eps.BaseSysMenuEntity {
 	children?: Item[];
@@ -124,6 +125,26 @@ interface Item extends Eps.BaseSysMenuEntity {
 
 const { service, mitt } = useCool();
 const { menu } = useStore();
+
+const options = reactive({
+	type: [
+		{
+			label: '目录',
+			value: 0,
+			type: 'warning'
+		},
+		{
+			label: '菜单',
+			value: 1,
+			type: 'success'
+		},
+		{
+			label: '权限',
+			value: 2,
+			type: 'danger'
+		}
+	]
+});
 
 // cl-table
 const Table = useTable({
@@ -176,23 +197,7 @@ const Table = useTable({
 			prop: 'type',
 			label: '类型',
 			width: 100,
-			dict: [
-				{
-					label: '目录',
-					value: 0,
-					type: 'warning'
-				},
-				{
-					label: '菜单',
-					value: 1,
-					type: 'success'
-				},
-				{
-					label: '权限',
-					value: 2,
-					type: 'danger'
-				}
-			]
+			dict: options.type
 		},
 		{
 			prop: 'router',
@@ -251,20 +256,7 @@ const Upsert = useUpsert({
 			required: true,
 			component: {
 				name: 'el-radio-group',
-				options: [
-					{
-						label: '目录',
-						value: 0
-					},
-					{
-						label: '菜单',
-						value: 1
-					},
-					{
-						label: '权限',
-						value: 2
-					}
-				]
+				options: options.type
 			}
 		},
 		{

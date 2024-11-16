@@ -1,5 +1,5 @@
 import { defineComponent, h, nextTick, toRef, watch } from "vue";
-import { cloneDeep, isBoolean } from "lodash-es";
+import { cloneDeep, get, isBoolean } from "lodash-es";
 import { useAction, useForm, usePlugins, useTabs } from "./helper";
 import { useBrowser, useConfig, useElApi, useRefs } from "../../hooks";
 import { getValue, merge } from "../../utils";
@@ -170,7 +170,7 @@ export default defineComponent({
 								if (e.hook) {
 									formHook.submit({
 										...e,
-										value: e.prop ? d[e.prop] : undefined,
+										value: e.prop ? get(d, e.prop) : undefined,
 										form: d
 									});
 								}
@@ -283,7 +283,7 @@ export default defineComponent({
 						// hook 绑定值
 						formHook.bind({
 							...e,
-							value: form[e.prop] !== undefined ? form[e.prop] : cloneDeep(e.value),
+							value: get(form, e.prop) !== undefined ? get(form, e.prop) : cloneDeep(e.value),
 							form
 						});
 

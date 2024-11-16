@@ -57,7 +57,21 @@
 										<template #default="{ data }">
 											<div class="item">
 												<component :is="data.icon" v-if="data.icon" />
-												<span>{{ data[tree.props.label] }}</span>
+
+												<slot
+													name="item-name"
+													:item="data"
+													:selected="selected"
+												>
+													<el-text truncated>
+														{{ data[tree.props.label] }}
+														{{
+															isEmpty(data[tree.props.children])
+																? ``
+																: `（${data[tree.props.children]?.length}）`
+														}}
+													</el-text>
+												</slot>
 											</div>
 										</template>
 									</el-tree>
@@ -551,7 +565,8 @@ defineExpose({
 					.item {
 						display: flex;
 						align-items: center;
-						line-height: 1;
+						flex: 1;
+						overflow: hidden;
 					}
 				}
 
