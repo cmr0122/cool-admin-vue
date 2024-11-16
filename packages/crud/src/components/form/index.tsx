@@ -1,4 +1,4 @@
-import { defineComponent, h, nextTick, toRef, watch } from "vue";
+import { defineComponent, h, nextTick, } from "vue";
 import { cloneDeep, get, isBoolean } from "lodash-es";
 import { useAction, useForm, usePlugins, useTabs } from "./helper";
 import { useBrowser, useConfig, useElApi, useRefs } from "../../hooks";
@@ -335,7 +335,7 @@ export default defineComponent({
 				function deep(e: ClForm.Item) {
 					formHook.bind({
 						...e,
-						value: e.prop ? data[e.prop] : undefined,
+						value: e.prop ? get(data, e.prop) : undefined,
 						form: data
 					});
 
