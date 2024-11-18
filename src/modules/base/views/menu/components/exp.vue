@@ -48,7 +48,8 @@ function open() {
 						collapseTags: true,
 						collapseTagsTooltip: true,
 						props: {
-							label: 'name'
+							label: 'name',
+							children: '_children'
 						}
 					}
 				}

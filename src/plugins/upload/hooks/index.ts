@@ -54,24 +54,31 @@ export function useUpload() {
 						// 上传进度
 						let progress = 0;
 
+						const reqData = {
+							url: host,
+							method: 'POST',
+							headers: {
+								'Content-Type': 'multipart/form-data',
+								Authorization: isLocal ? user.token : null
+							},
+							timeout: 600000,
+							data: file,
+							onUploadProgress(e: AxiosProgressEvent) {
+								progress = e.total ? Math.floor((e.loaded / e.total) * 100) : 0;
+								onProgress?.(progress);
+							},
+							proxy: isLocal,
+							NProgress: false
+						};
+
+						if (type == 'minio') {
+							reqData.headers['Content-Type'] = file.type;
+							reqData.method = 'PUT';
+						}
+
 						// 上传
 						await service
-							.request({
-								url: host,
-								method: 'POST',
-								headers: {
-									'Content-Type': 'multipart/form-data',
-									Authorization: isLocal ? user.token : null
-								},
-								timeout: 600000,
-								data: fd,
-								onUploadProgress(e: AxiosProgressEvent) {
-									progress = e.total ? Math.floor((e.loaded / e.total) * 100) : 0;
-									onProgress?.(progress);
-								},
-								proxy: isLocal,
-								NProgress: false
-							})
+							.request(reqData as any)
 							.then(res => {
 								if (progress != 100) {
 									onProgress?.(100);
@@ -106,7 +113,7 @@ export function useUpload() {
 					} else {
 						service.base.comm
 							.upload(
-								type == 'aws'
+								['aws', 'minio'].includes(type)
 									? {
 											key
 										}
@@ -148,6 +155,12 @@ export function useUpload() {
 										next({
 											host: res.url,
 											data: res.fields
+										});
+										break;
+
+									default:
+										next({
+											host: res.url
 										});
 										break;
 								}
