@@ -62,7 +62,7 @@ export function useUpload() {
 								Authorization: isLocal ? user.token : null
 							},
 							timeout: 600000,
-							data: file,
+							data: fd as any,
 							onUploadProgress(e: AxiosProgressEvent) {
 								progress = e.total ? Math.floor((e.loaded / e.total) * 100) : 0;
 								onProgress?.(progress);
@@ -74,6 +74,7 @@ export function useUpload() {
 						if (type == 'minio') {
 							reqData.headers['Content-Type'] = file.type;
 							reqData.method = 'PUT';
+							reqData.data = file;
 						}
 
 						// 上传
@@ -160,7 +161,8 @@ export function useUpload() {
 
 									default:
 										next({
-											host: res.url
+											host: res.url,
+											preview: res.previewUrl
 										});
 										break;
 								}
